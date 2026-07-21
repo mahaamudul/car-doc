@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { Search, ShoppingCart } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
     const navItems = [
@@ -26,6 +29,10 @@ const Navbar = () => {
             link: "/contact",
         }
     ]
+
+    const session=useSession()
+    console.log(session);
+
   return (
     <div className="navbar bg-base-100 shadow-sm">
         <div className="navbar container mx-auto px-10">
@@ -83,6 +90,9 @@ const Navbar = () => {
         </div>
         
         <a className="btn btn-outline btn-primary px-">Appointment</a>
+        {!session.data?.user ? (
+            <Link href="/login" className="btn btn-primary">Login</Link>
+        ):(<button className="btn btn-primary" onClick={() => signOut()}>Logout</button>)}
       </div>
     </div>
     </div>

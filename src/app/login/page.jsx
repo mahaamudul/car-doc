@@ -5,8 +5,10 @@ import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e) => {
@@ -14,12 +16,14 @@ const LoginPage = () => {
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    const response=signIn("credentials", {
+    const response= await signIn("credentials", {
       email,
       password,
       redirect:false
     })
-    console.log(response);
+    if(response.status===200){
+      router.push("/");
+    }
 
   }
 
