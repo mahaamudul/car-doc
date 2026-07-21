@@ -6,6 +6,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import SocialSignIn from "@/components/Shared/SocialSignIn";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -116,9 +117,7 @@ const LoginPage = () => {
 
             <div className="divider">OR</div>
 
-            <button className="btn btn-outline w-full">
-              Continue with Google
-            </button>
+            <SocialSignIn></SocialSignIn>
 
             <p className="text-center mt-8 text-gray-600">
               New to Car Doctor?{" "}
