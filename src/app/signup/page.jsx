@@ -8,14 +8,30 @@ import { useState } from "react";
 const Page = () => {
   const [showPassword, setShowPassword] = useState(false);
 
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+
+    const newUser = {
+      name: form.name.value,
+      email: form.email.value,
+      password: form.password.value,
+    };
+
+    console.log(newUser);
+
+    // TODO: Save user to database / Firebase
+
+    form.reset();
+    setShowPassword(false);
+  };
+
   return (
     <section className="min-h-screen flex items-center py-16">
       <div className="max-w-7xl mx-auto w-full px-4">
-
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-
           {/* Left Side */}
-
           <div className="hidden lg:flex justify-center">
             <Image
               src="/assets/images/login/login.svg"
@@ -27,21 +43,17 @@ const Page = () => {
           </div>
 
           {/* Right Side */}
-
           <div className="border border-gray-200 rounded-2xl shadow-sm p-8 lg:p-12">
-
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold">
-                Sign Up
-              </h1>
+              <h1 className="text-4xl font-bold">Sign Up</h1>
 
               <p className="text-gray-500 mt-3">
                 Create your account to continue.
               </p>
             </div>
 
-            <form className="space-y-5">
-
+            <form onSubmit={handleSignUp} className="space-y-5">
+              {/* Name */}
               <div>
                 <label className="label">
                   <span className="label-text font-medium">
@@ -50,12 +62,15 @@ const Page = () => {
                 </label>
 
                 <input
+                  name="name"
                   type="text"
                   placeholder="Your name"
                   className="input input-bordered w-full"
+                  required
                 />
               </div>
 
+              {/* Email */}
               <div>
                 <label className="label">
                   <span className="label-text font-medium">
@@ -64,14 +79,16 @@ const Page = () => {
                 </label>
 
                 <input
+                  name="email"
                   type="email"
                   placeholder="example@email.com"
                   className="input input-bordered w-full"
+                  required
                 />
               </div>
 
+              {/* Password */}
               <div>
-
                 <label className="label">
                   <span className="label-text font-medium">
                     Password
@@ -79,16 +96,19 @@ const Page = () => {
                 </label>
 
                 <div className="relative">
-
                   <input
+                    name="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="********"
                     className="input input-bordered w-full pr-12"
+                    required
                   />
 
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
+                    onClick={() =>
+                      setShowPassword(!showPassword)
+                    }
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
                   >
                     {showPassword ? (
@@ -97,15 +117,16 @@ const Page = () => {
                       <Eye size={20} />
                     )}
                   </button>
-
                 </div>
-
               </div>
 
-              <button className="btn btn-primary w-full mt-3">
+              {/* Submit */}
+              <button
+                type="submit"
+                className="btn btn-primary w-full mt-3"
+              >
                 Sign Up
               </button>
-
             </form>
 
             <div className="divider">OR</div>
@@ -123,11 +144,8 @@ const Page = () => {
                 Login
               </Link>
             </p>
-
           </div>
-
         </div>
-
       </div>
     </section>
   );

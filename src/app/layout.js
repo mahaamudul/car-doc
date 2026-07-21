@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
       <AuthProvider>
 
         <Navbar></Navbar>
-        {children}4
+         {children}
         <Footer></Footer>
         </AuthProvider>
       </body>
