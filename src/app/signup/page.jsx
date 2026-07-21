@@ -22,6 +22,22 @@ const Page = () => {
     console.log(newUser);
 
     // TODO: Save user to database / Firebase
+    const response = await fetch("http://localhost:3000/signup/api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      console.error("Error creating user:", result.error);
+      return;
+    }
+
+    console.log("User created successfully:", result);
 
     form.reset();
     setShowPassword(false);

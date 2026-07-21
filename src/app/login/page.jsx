@@ -4,9 +4,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+    const response=signIn("credentials", {
+      email,
+      password,
+      redirect:false
+    })
+    console.log(response);
+
+  }
 
   return (
     <section className="min-h-screen flex items-center py-16">
@@ -33,7 +48,7 @@ const LoginPage = () => {
               </p>
             </div>
 
-            <form className="space-y-5">
+            <form onSubmit={handleLogin} className="space-y-5">
               {/* Email */}
               <div>
                 <label className="label">
@@ -41,6 +56,7 @@ const LoginPage = () => {
                 </label>
 
                 <input
+                  name="email"
                   type="email"
                   placeholder="example@email.com"
                   className="input input-bordered w-full"
@@ -62,6 +78,7 @@ const LoginPage = () => {
 
                 <div className="relative">
                   <input
+                    name="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="********"
                     className="input input-bordered w-full pr-12"
@@ -90,9 +107,7 @@ const LoginPage = () => {
               </div>
 
               {/* Login Button */}
-              <button className="btn btn-primary w-full">
-                Login
-              </button>
+              <input type="submit" className="btn btn-primary w-full" value="Login" />
             </form>
 
             <div className="divider">OR</div>
