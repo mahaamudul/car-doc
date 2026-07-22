@@ -11,9 +11,7 @@ const SocialSignIn = () => {
     });
   };
 
-  const handleGithubSignIn = () => {
-    // TODO
-  };
+  
 
   return (
     <div className="space-y-3">
@@ -25,13 +23,7 @@ const SocialSignIn = () => {
         Continue with Google
       </button>
 
-      <button
-        onClick={handleGithubSignIn}
-        className="btn btn-outline w-full"
-      >
-        <FaGithub className="text-lg" />
-        Continue with GitHub
-      </button>
+      
     </div>
   );
 };
