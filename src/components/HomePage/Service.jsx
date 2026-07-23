@@ -1,8 +1,12 @@
 import React from "react";
 import ServiceCard from "../cards/ServiceCard";
 import { services } from "../../app/lib/services";
+import { getServices } from "@/services/api_call/getServices";
 
-const Service = () => {
+
+const Service = async () => {
+  const services = await getServices();
+  console.log(services);
   return (
     <section className="py-24">
 
