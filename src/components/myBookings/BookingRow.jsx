@@ -14,7 +14,6 @@ const BookingRow = ({ booking, bookings, setBookings }) => {
     status,
   } = booking;
 
-  // Delete Booking
   const handleDelete = async () => {
     const confirmDelete = confirm(
       "Are you sure you want to delete this booking?"
@@ -23,14 +22,19 @@ const BookingRow = ({ booking, bookings, setBookings }) => {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`/my-bookings/api/${_id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `/my-bookings/api/delete-bookings/${_id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       const data = await res.json();
 
       if (res.ok) {
-        setBookings(bookings.filter((item) => item._id !== _id));
+        setBookings(
+          bookings.filter((item) => item._id !== _id)
+        );
       } else {
         alert(data.message || "Delete failed");
       }
@@ -39,7 +43,6 @@ const BookingRow = ({ booking, bookings, setBookings }) => {
     }
   };
 
-  // Update Status
   const handleComplete = async () => {
     try {
       const res = await fetch(`/my-bookings/api/${_id}`, {
@@ -69,17 +72,15 @@ const BookingRow = ({ booking, bookings, setBookings }) => {
 
   return (
     <tr className="hover">
-      {/* Delete */}
       <td>
         <button
           onClick={handleDelete}
-          className="btn btn-circle btn-sm btn-error btn-outline"
+          className="btn btn-circle btn-error btn-outline btn-sm"
         >
           <Trash2 size={18} />
         </button>
       </td>
 
-      {/* Service */}
       <td>
         <div className="flex items-center gap-4">
           <Image
@@ -87,7 +88,7 @@ const BookingRow = ({ booking, bookings, setBookings }) => {
             alt={serviceName}
             width={90}
             height={90}
-            className="rounded-xl object-cover w-20 h-20"
+            className="w-20 h-20 rounded-xl object-cover"
           />
 
           <div>
@@ -102,34 +103,20 @@ const BookingRow = ({ booking, bookings, setBookings }) => {
         </div>
       </td>
 
-      {/* Customer */}
       <td>
         <div>
-          <p className="font-semibold">
+          <h3 className="font-semibold">
             {customerName}
-          </p>
-
-          <p className="text-sm text-gray-500">
-            Booking Customer
-          </p>
+          </h3>
         </div>
       </td>
 
-      {/* Date */}
-      <td>
-        <span className="font-medium">
-          {date}
-        </span>
+      <td>{date}</td>
+
+      <td className="font-bold text-primary">
+        ${price}
       </td>
 
-      {/* Price */}
-      <td>
-        <span className="font-bold text-primary text-lg">
-          ${price}
-        </span>
-      </td>
-
-      {/* Status */}
       <td>
         {status === "completed" ? (
           <span className="badge badge-success badge-lg">
