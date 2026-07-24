@@ -120,9 +120,12 @@ const ServiceSidebar = ({ service }) => {
           Price : ${service.price}
         </h2>
 
-        <button className="btn btn-primary w-full mt-6">
-          Proceed Checkout
-        </button>
+        <Link
+  href={`/checkout/${service._id}`}
+  className="btn btn-primary w-full mt-6"
+>
+  Proceed Checkout
+</Link>
       </div>
     </div>
   );

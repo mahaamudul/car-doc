@@ -15,7 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Car Doctor Pro",
+  title: {
+    default: "CarDoc",
+    template: "%s | CarDoc",
+  },
   description: "Car repair and maintenance services",
 };
 

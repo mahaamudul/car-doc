@@ -3,6 +3,11 @@ import ServiceBanner from "@/components/serviceDetails/ServiceBanner";
 import ServiceContent from "@/components/serviceDetails/ServiceContent";
 import ServiceSidebar from "@/components/serviceDetails/ServiceSidebar";
 
+export const metadata = {
+  title: "Service Details | CarDoc",
+  description: "Car repair and maintenance services",
+};
+
 const Page = async ({ params }) => {
   const { id } = await params;
 
