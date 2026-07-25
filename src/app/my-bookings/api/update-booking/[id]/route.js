@@ -8,7 +8,7 @@ export const PATCH = async (request, { params }) => {
     const db = await connectDB();
     const bookingCollection = db.collection("bookings");
 
-    const { customerName, phone, address, date, message } =
+    const updatedDoc =
       await request.json();
 
     const result = await bookingCollection.updateOne(
@@ -17,11 +17,7 @@ export const PATCH = async (request, { params }) => {
       },
       {
         $set: {
-          customerName,
-          phone,
-          address,
-          date,
-          message,
+            ...updatedDoc,
         },
       },
       {

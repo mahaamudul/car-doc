@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Trash2, CheckCircle, Pencil } from "lucide-react";
 import { toast } from "sonner"; // Import toast
+import Link from "next/link";
 
 const BookingRow = ({ booking, bookings, setBookings }) => {
   const {
@@ -113,12 +114,14 @@ const BookingRow = ({ booking, bookings, setBookings }) => {
         >
           <Trash2  size={18} />
         </button>
+        <Link href={`/my-bookings/update-booking/${_id}`}>
         <button
-          onClick={handleDelete}
+          
           className="btn btn-circle  btn-primary btn-outline btn-sm"
         >
           <Pencil size={18} />
         </button>
+        </Link>
         </div>
       </td>
 

@@ -5,12 +5,16 @@ import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import SocialSignIn from "@/components/Shared/SocialSignIn";
 
 const LoginPage = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+    const searchParams=useSearchParams();
+    const path=searchParams.get('redirect') ;
+
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -20,11 +24,10 @@ const LoginPage = () => {
     const response= await signIn("credentials", {
       email,
       password,
-      redirect:false
+      redirect:true,
+      callbackUrl:path? path : "/"
     })
-    if(response.status===200){
-      router.push("/");
-    }
+    
 
   }
 

@@ -9,5 +9,10 @@ export const GET = async (request, { params }) => {
     const booking = await bookingCollection.findOne({ _id: new ObjectId(id) });
     return Response.json(booking, { status: 200 });
     } catch (error) {
-    return new Response.json({ message: "Failed to fetch booking" }, { status: 500 });
+     console.error(error);
+
+  return Response.json(
+    { message: "Failed to fetch booking" },
+    { status: 500 }
+  );
   }}
