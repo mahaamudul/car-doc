@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Shared/Navbar";
 import Footer from "@/components/Shared/Footer";
 import AuthProvider from "@/services/AuthProvider";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,19 +26,29 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html
-     data-theme="cardoc"
+      data-theme="cardoc"
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-        <body className="min-h-full flex flex-col">
-      <AuthProvider>
+      <body className="min-h-full flex flex-col">
+        <Toaster
+          position="top-center"
+           closeButton
+          className="flex justify-center"
+          toastOptions={{
+            style: {
+              color: "#ff3811",
+              width: "fit-content",
+            },
+          }}
+        />
 
-        <Navbar></Navbar>
-         {children}
-        <Footer></Footer>
+        <AuthProvider>
+          <Navbar></Navbar>
+          {children}
+          <Footer></Footer>
         </AuthProvider>
       </body>
-      
     </html>
   );
 }

@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { Trash2, CheckCircle } from "lucide-react";
+import { Trash2, CheckCircle, Pencil } from "lucide-react";
+import { toast } from "sonner"; // Import toast
 
 const BookingRow = ({ booking, bookings, setBookings }) => {
   const {
@@ -14,13 +15,8 @@ const BookingRow = ({ booking, bookings, setBookings }) => {
     status,
   } = booking;
 
-  const handleDelete = async () => {
-    const confirmDelete = confirm(
-      "Are you sure you want to delete this booking?"
-    );
-
-    if (!confirmDelete) return;
-
+  // Actual API logic executed after user confirmation (Plain JavaScript)
+  const executeDelete = async (toastId) => {
     try {
       const res = await fetch(
         `/my-bookings/api/delete-bookings/${_id}`,
@@ -35,12 +31,47 @@ const BookingRow = ({ booking, bookings, setBookings }) => {
         setBookings(
           bookings.filter((item) => item._id !== _id)
         );
+        // Dismiss confirmation toast and show success toast
+        toast.dismiss(toastId);
+        toast.success(`${serviceName} booking deleted successfully.`);
       } else {
-        alert(data.message || "Delete failed");
+        toast.error(data.message || "Delete failed");
       }
     } catch (err) {
       console.error(err);
+      toast.error("Something went wrong while deleting.");
     }
+  };
+
+  const handleDelete = () => {
+    // Show a custom confirmation toast
+    toast.custom((t) => (
+      <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-100 flex flex-col gap-3 max-w-sm">
+        <div>
+          <h4 className="font-semibold text-gray-900">Delete Booking?</h4>
+          <p className="text-sm text-gray-500">
+            Are you sure you want to delete {serviceName}?
+          </p>
+        </div>
+        <div className="flex justify-end gap-2">
+          <button
+            onClick={() => toast.dismiss(t)}
+            className="px-3 py-1.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => executeDelete(t)}
+            className="px-3 py-1.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: Infinity, // Stops the confirmation toast from disappearing automatically
+      position: "top-center"
+    });
   };
 
   const handleComplete = async () => {
@@ -62,23 +93,33 @@ const BookingRow = ({ booking, bookings, setBookings }) => {
         );
 
         setBookings(updated);
+        toast.success("Booking status updated to completed!");
       } else {
-        alert(data.message || "Update failed");
+        toast.error(data.message || "Update failed");
       }
     } catch (err) {
       console.error(err);
+      toast.error("Failed to complete booking.");
     }
   };
 
   return (
     <tr className="hover">
       <td>
+        <div className="flex items-center gap-2">
+          <button
+          onClick={handleDelete}
+          className="btn btn-circle  btn-primary btn-outline btn-sm"
+        >
+          <Trash2  size={18} />
+        </button>
         <button
           onClick={handleDelete}
-          className="btn btn-circle btn-error btn-outline btn-sm"
+          className="btn btn-circle  btn-primary btn-outline btn-sm"
         >
-          <Trash2 size={18} />
+          <Pencil size={18} />
         </button>
+        </div>
       </td>
 
       <td>

@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const CheckoutForm = ({ service }) => {
   const { data: session } = useSession();
@@ -11,63 +12,61 @@ const CheckoutForm = ({ service }) => {
   const [loading, setLoading] = useState(false);
 
   const handleBooking = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  setLoading(true);
+    setLoading(true);
 
-  const form = e.target;
+    const form = e.target;
 
-  const booking = {
-    customerName: form.name.value,
-    email: form.email.value,
-    phone: form.phone.value,
-    address: form.address.value,
-    date: form.date.value,
-    message: form.message.value,
+    const booking = {
+      customerName: form.name.value,
+      email: form.email.value,
+      phone: form.phone.value,
+      address: form.address.value,
+      date: form.date.value,
+      message: form.message.value,
 
-    serviceId: service._id,
-    serviceName: service.title,
-    serviceImage: service.img,
-    price: service.price,
+      serviceId: service._id,
+      serviceName: service.title,
+      serviceImage: service.img,
+      price: service.price,
 
-    status: "pending",
-    createdAt: new Date(),
-  };
+      status: "pending",
+      createdAt: new Date(),
+    };
 
-  try {
-    const res = await fetch("/checkout/api/bookings", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(booking),
-    });
+    try {
+      const res = await fetch("/checkout/api/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(booking),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-      alert("Booking Successful!");
+      if (res.ok) {
+        toast.success("Booking Successful!");
 
-      console.log(data);
+        console.log(data);
 
-      form.reset();
-    } else {
-      alert(data.message || "Booking Failed");
+        form.reset();
+      } else {
+                toast.error("Booking Failed!");
+
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong!");
     }
-  } catch (err) {
-    console.error(err);
-    alert("Something went wrong!");
-  }
 
-  setLoading(false);
-};
+    setLoading(false);
+  };
 
   return (
     <div className="bg-base-200 rounded-xl p-8 lg:p-14">
-      <form
-        onSubmit={handleBooking}
-        className="space-y-6"
-      >
+      <form onSubmit={handleBooking} className="space-y-6">
         <div className="grid md:grid-cols-2 gap-6">
           {/* Name */}
           <input
@@ -81,6 +80,7 @@ const CheckoutForm = ({ service }) => {
 
           {/* Email */}
           <input
+          readOnly
             name="email"
             type="email"
             required
