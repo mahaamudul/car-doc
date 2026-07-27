@@ -12,7 +12,7 @@ const Page = async ({ params }) => {
       <div className="max-w-7xl mx-auto px-4 mt-10">
         <ServiceBanner title="Check Out" />
       </div>
-
+  
       <div className="max-w-7xl mx-auto px-4 mt-20">
         <CheckoutForm service={service} />
       </div>

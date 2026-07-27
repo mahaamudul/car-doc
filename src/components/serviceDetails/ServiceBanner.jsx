@@ -42,7 +42,7 @@ const ServiceBanner = ({ title }) => {
 
         <span className="mx-1">/</span>
 
-        <span>Service Details</span>
+        <span>{title}</span>
       </div>
     </div>
   );

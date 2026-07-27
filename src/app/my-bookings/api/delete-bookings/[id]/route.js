@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { connectDB } from "@/app/lib/connectDB";
+import { NextResponse } from "next/server";
 
 export const DELETE = async (request, { params }) => {
   const { id } = await params;
@@ -13,20 +14,19 @@ export const DELETE = async (request, { params }) => {
     });
 
     if (result.deletedCount === 0) {
-      return Response.json(
+      return NextResponse.json(
         { message: "Booking not found" },
         { status: 404 }
       );
     }
 
-    return Response.json(
+    return NextResponse.json(
       { message: "Booking deleted successfully" },
       { status: 200 }
     );
   } catch (err) {
-    console.error(err);
 
-    return Response.json(
+    return NextResponse.json(
       { error: err.message },
       { status: 500 }
     );

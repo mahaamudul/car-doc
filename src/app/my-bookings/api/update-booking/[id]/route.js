@@ -1,5 +1,6 @@
 import { connectDB } from "@/app/lib/connectDB";
 import { ObjectId } from "mongodb";
+import { NextResponse } from "next/server";
 
 export const PATCH = async (request, { params }) => {
   try {
@@ -8,8 +9,7 @@ export const PATCH = async (request, { params }) => {
     const db = await connectDB();
     const bookingCollection = db.collection("bookings");
 
-    const updatedDoc =
-      await request.json();
+    const updatedDoc = await request.json();
 
     const result = await bookingCollection.updateOne(
       {
@@ -17,34 +17,30 @@ export const PATCH = async (request, { params }) => {
       },
       {
         $set: {
-            ...updatedDoc,
+          ...updatedDoc,
         },
       },
       {
         upsert: false,
-      }
+      },
     );
 
     if (result.matchedCount === 0) {
-      return Response.json(
-        { message: "Booking not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "Booking not found" }, { status: 404 });
     }
 
-    return Response.json(
+    return NextResponse.json(
       { message: "Booking updated successfully" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
-    console.error(error);
 
-    return Response.json(
+    return NextResponse.json(
       {
         message: "Failed to update booking",
         error: error.message,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 };

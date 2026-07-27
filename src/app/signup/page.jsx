@@ -4,9 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+    const router = useRouter();
+
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -19,10 +24,10 @@ const Page = () => {
       password: form.password.value,
     };
 
-    console.log(newUser);
+    
 
     // TODO: Save user to database / Firebase
-    const response = await fetch("http://localhost:3000/signup/api", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/signup/api`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,14 +38,15 @@ const Page = () => {
     const result = await response.json();
 
     if (!response.ok) {
-      console.error("Error creating user:", result.error);
+      toast.error("Error creating user");
       return;
     }
 
-    console.log("User created successfully:", result);
+    toast.success("User created successfully!");
 
     form.reset();
     setShowPassword(false);
+    router.push("/login");
   };
 
   return (

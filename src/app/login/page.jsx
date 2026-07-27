@@ -3,32 +3,38 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { useState, Suspense } from "react"; // 1. Import Suspense
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import SocialSignIn from "@/components/Shared/SocialSignIn";
+import { toast } from "sonner";
 
-const LoginPage = () => {
+// 2. Rename your original component to something like LoginContent
+const LoginContent = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-    const searchParams=useSearchParams();
-    const path=searchParams.get('redirect') ;
-
-
+  const searchParams = useSearchParams();
+  const path = searchParams.get('redirect');
 
   const handleLogin = async (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    const response= await signIn("credentials", {
+    
+    const response = await signIn("credentials", {
       email,
       password,
-      redirect:true,
-      callbackUrl:path? path : "/"
-    })
+      redirect: false,
+    });
     
-
+    if (response?.ok) {
+      router.push(path ? path : "/");
+      router.refresh();
+      toast.success("Login successful!");
+    } else {
+      toast.error("Invalid email or password");
+    }
   }
 
   return (
@@ -50,7 +56,6 @@ const LoginPage = () => {
           <div className="border border-gray-200 rounded-2xl shadow-sm p-8 lg:p-12">
             <div className="text-center mb-8">
               <h1 className="text-4xl font-bold">Login</h1>
-
               <p className="text-gray-500 mt-3">
                 Welcome back! Login to your account.
               </p>
@@ -62,7 +67,6 @@ const LoginPage = () => {
                 <label className="label">
                   <span className="label-text font-medium">Email</span>
                 </label>
-
                 <input
                   name="email"
                   type="email"
@@ -75,7 +79,6 @@ const LoginPage = () => {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <label className="font-medium">Password</label>
-
                   <Link
                     href="/forgot-password"
                     className="text-sm text-primary hover:underline"
@@ -91,28 +94,18 @@ const LoginPage = () => {
                     placeholder="********"
                     className="input input-bordered w-full pr-12"
                   />
-
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
                   >
-                    {showPassword ? (
-                      <EyeOff size={20} />
-                    ) : (
-                      <Eye size={20} />
-                    )}
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
               </div>
 
-              {/* Remember Me */}
-              <div className="flex items-center justify-between">
-                <label className="label cursor-pointer gap-2">
-                  <input type="checkbox" className="checkbox checkbox-primary checkbox-sm" />
-                  <span className="label-text">Remember me</span>
-                </label>
-              </div>
+             
+              
 
               {/* Login Button */}
               <input type="submit" className="btn btn-primary w-full" value="Login" />
@@ -120,7 +113,7 @@ const LoginPage = () => {
 
             <div className="divider">OR</div>
 
-            <SocialSignIn></SocialSignIn>
+            <SocialSignIn />
 
             <p className="text-center mt-8 text-gray-600">
               New to Car Doctor?{" "}
@@ -135,6 +128,15 @@ const LoginPage = () => {
         </div>
       </div>
     </section>
+  );
+};
+
+// 3. Create a new default export that wraps LoginContent in Suspense
+const LoginPage = () => {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 };
 

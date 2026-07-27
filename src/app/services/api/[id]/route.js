@@ -1,4 +1,6 @@
 import { connectDB } from "@/app/lib/connectDB";
+import { NextResponse } from "next/server";
+
 
 export async function GET(request, { params }) {
   const { id } = await params;
@@ -14,13 +16,12 @@ export async function GET(request, { params }) {
     });
 
     if (!service) {
-      return Response.json({ message: "Service not found" }, { status: 404 });
+      return NextResponse.json({ message: "Service not found" }, { status: 404 });
     }
 
-    return Response.json(service);
+    return NextResponse.json(service);
   } catch (err) {
-    console.error(err);
 
-    return Response.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

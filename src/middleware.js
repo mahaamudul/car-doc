@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 
 export async function middleware(req) {
-  // 1. Read the token directly from the request object cookies
-  const token = req.cookies.get("next-auth.session-token");
+  // 1. Check for BOTH local (HTTP) and secure (HTTPS) cookies
+  const token = 
+    req.cookies.get("next-auth.session-token")?.value || 
+    req.cookies.get("__secure-next-auth.session-token")?.value;
+    
   const pathname = req.nextUrl.pathname;
 
   // 2. Safely bypass internal API routes
@@ -12,7 +15,7 @@ export async function middleware(req) {
 
   // 3. Redirect unauthenticated users
   if (!token) {
-    return NextResponse.redirect(new URL(`/login?redirect=${pathname}`, req.url));
+    return NextResponse.redirect(new URL(`/login?redirect=${encodeURIComponent(pathname)}`, req.url));
   }
 
   return NextResponse.next();
