@@ -1,4 +1,3 @@
-import BookingBanner from "@/components/myBookings/BookingBanner";
 import Heading from "@/components/Shared/Heading";
 import UpdateForm from "@/components/update/UpdateForm";
 import { getBookingDetails } from "@/services/api_call/getBooking";
