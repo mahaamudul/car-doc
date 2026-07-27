@@ -1,67 +1,53 @@
 import Link from "next/link";
 import { Download, ArrowRight, Phone } from "lucide-react";
+import { getServices } from "@/services/api_call/getServices";
 
-const ServiceSidebar = ({ service }) => {
-  const services = [
-    "Full Car Repair",
-    "Engine Repair",
-    "Automatic Services",
-    "Engine Oil Change",
-    "Battery Charge",
-  ];
+const ServiceSidebar = async ({ service }) => {
+  // 1. Await the services data on the server
+  const services = await getServices();
 
   return (
     <div className="space-y-8 sticky top-24">
-      {/* Services */}
+      {/* Dynamic Services List */}
       <div className="bg-base-200 rounded-xl p-7">
-        <h2 className="text-2xl font-bold mb-6">
-          Services
-        </h2>
+        <h2 className="text-2xl font-bold mb-6">Services</h2>
 
         <div className="space-y-4">
-          {services.map((item, index) => (
-            <Link
-              key={index}
-              href="#"
-              className={`flex items-center justify-between p-4 rounded-lg transition-all ${
-                item === service.title
-                  ? "bg-primary text-white"
-                  : "bg-white hover:bg-primary hover:text-white"
-              }`}
-            >
-              <span className="font-medium">
-                {item}
-              </span>
+          {services?.map((item) => {
+            const isActive = item.title === service?.title || item._id === service?._id;
 
-              <ArrowRight size={18} />
-            </Link>
-          ))}
+            return (
+              <Link
+                key={item._id}
+                href={`/services/${item._id}`}
+                className={`flex items-center justify-between p-4 rounded-lg font-medium transition-all ${
+                  isActive
+                    ? "bg-primary text-white"
+                    : "bg-base-100 text-base-content hover:bg-primary hover:text-white"
+                }`}
+              >
+                <span>{item.title}</span>
+                <ArrowRight size={18} />
+              </Link>
+            );
+          })}
         </div>
       </div>
 
-      {/* Download */}
+      {/* Downloads Section */}
       <div className="bg-[#151515] text-white rounded-xl p-7">
-        <h2 className="text-2xl font-bold mb-6">
-          Download
-        </h2>
+        <h2 className="text-2xl font-bold mb-6">Download</h2>
 
         <div className="space-y-5">
           <div className="flex justify-between items-center">
             <div className="flex gap-4 items-center">
               <Download className="text-primary" />
-
               <div>
-                <h3 className="font-semibold">
-                  Our Brochure
-                </h3>
-
-                <p className="text-sm text-gray-400">
-                  Download PDF
-                </p>
+                <h3 className="font-semibold">Our Brochure</h3>
+                <p className="text-sm text-gray-400">Download PDF</p>
               </div>
             </div>
-
-            <button className="btn btn-primary btn-square">
+            <button className="btn btn-primary btn-square btn-sm">
               <ArrowRight size={18} />
             </button>
           </div>
@@ -69,19 +55,12 @@ const ServiceSidebar = ({ service }) => {
           <div className="flex justify-between items-center">
             <div className="flex gap-4 items-center">
               <Download className="text-primary" />
-
               <div>
-                <h3 className="font-semibold">
-                  Company Details
-                </h3>
-
-                <p className="text-sm text-gray-400">
-                  Download PDF
-                </p>
+                <h3 className="font-semibold">Company Details</h3>
+                <p className="text-sm text-gray-400">Download PDF</p>
               </div>
             </div>
-
-            <button className="btn btn-primary btn-square">
+            <button className="btn btn-primary btn-square btn-sm">
               <ArrowRight size={18} />
             </button>
           </div>
@@ -94,38 +73,30 @@ const ServiceSidebar = ({ service }) => {
           <Phone size={36} />
         </div>
 
-        <h2 className="text-2xl font-bold mt-6">
-          Need Help?
-        </h2>
+        <h2 className="text-2xl font-bold mt-6">Need Help?</h2>
 
         <p className="text-gray-300 mt-3 leading-7">
-          Our support team is available 24/7 to help
-          you with bookings and service inquiries.
+          Our support team is available 24/7 to help you with bookings and service inquiries.
         </p>
 
         <div className="mt-6">
-          <p className="text-primary text-xl font-bold">
-            Car Doctor
-          </p>
-
-          <p className="text-gray-400">
-            Special Support
-          </p>
+          <p className="text-primary text-xl font-bold">Car Doctor</p>
+          <p className="text-gray-400">Special Support</p>
         </div>
       </div>
 
-      {/* Price */}
+      {/* Price & Checkout */}
       <div className="bg-base-200 rounded-xl p-7">
         <h2 className="text-3xl font-bold">
-          Price : ${service.price}
+          Price : ${service?.price}
         </h2>
 
         <Link
-  href={`/checkout/${service._id}`}
-  className="btn btn-primary w-full mt-6"
->
-  Proceed Checkout
-</Link>
+          href={`/checkout/${service?._id}`}
+          className="btn btn-primary w-full mt-6"
+        >
+          Proceed Checkout
+        </Link>
       </div>
     </div>
   );
