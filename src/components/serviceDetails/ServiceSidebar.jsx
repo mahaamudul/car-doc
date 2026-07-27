@@ -3,7 +3,7 @@ import { Download, ArrowRight, Phone } from "lucide-react";
 import { getServices } from "@/services/api_call/getServices";
 
 const ServiceSidebar = async ({ service }) => {
-  // 1. Await the services data on the server
+  // Await the services data on the server
   const services = await getServices();
 
   return (
@@ -14,21 +14,21 @@ const ServiceSidebar = async ({ service }) => {
 
         <div className="space-y-4">
           {services?.map((item) => {
+            // Check active state against title or ID
             const isActive = item.title === service?.title || item._id === service?._id;
 
             return (
-              <Link
-                key={item._id}
-                href={`/services/${item._id}`}
+              <div
+                key={item._id || item.title}
                 className={`flex items-center justify-between p-4 rounded-lg font-medium transition-all ${
                   isActive
-                    ? "bg-primary text-white"
+                    ? "bg-primary text-white shadow-md"
                     : "bg-base-100 text-base-content hover:bg-primary hover:text-white"
                 }`}
               >
                 <span>{item.title}</span>
                 <ArrowRight size={18} />
-              </Link>
+              </div>
             );
           })}
         </div>
@@ -87,9 +87,7 @@ const ServiceSidebar = async ({ service }) => {
 
       {/* Price & Checkout */}
       <div className="bg-base-200 rounded-xl p-7">
-        <h2 className="text-3xl font-bold">
-          Price : ${service?.price}
-        </h2>
+        <h2 className="text-3xl font-bold">Price : ${service?.price}</h2>
 
         <Link
           href={`/checkout/${service?._id}`}
