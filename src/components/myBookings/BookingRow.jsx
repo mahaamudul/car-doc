@@ -77,7 +77,7 @@ const BookingRow = ({ booking, bookings, setBookings }) => {
 
   const handleComplete = async () => {
     try {
-      const res = await fetch(`process.env.NEXT_PUBLIC_BASE_URL/my-bookings/api/${_id}`, {
+      const res = await fetch(`/my-bookings/api/${_id}`, {
         method: "PATCH",
       });
 
