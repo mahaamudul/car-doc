@@ -7,6 +7,8 @@ export async function middleware(req) {
     req.cookies.get("__secure-next-auth.session-token")?.value;
     
   const pathname = req.nextUrl.pathname;
+    console.log(token);
+    console.log(pathname);
 
   // 2. Safely bypass internal API routes
   if (pathname.includes('api')) {
