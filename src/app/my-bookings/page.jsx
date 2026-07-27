@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import BookingBanner from "@/components/myBookings/BookingBanner";
 import BookingTable from "@/components/myBookings/BookingTable";
+import Heading from "@/components/Shared/Heading";
 
 const MyBookingsPage = () => {
   const { data: session, status } = useSession();
@@ -60,7 +60,7 @@ const MyBookingsPage = () => {
   return (
     <section className="pb-24">
       <div className="max-w-7xl mx-auto px-4 mt-10">
-        <BookingBanner />
+        <Heading title="Manage Your Bookings" currentRoute="My Bookings" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 mt-16">

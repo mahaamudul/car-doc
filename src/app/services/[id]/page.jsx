@@ -1,10 +1,10 @@
 import { getServiceDetails } from "@/services/api_call/getServices";
-import ServiceBanner from "@/components/serviceDetails/ServiceBanner";
 import ServiceContent from "@/components/serviceDetails/ServiceContent";
 import ServiceSidebar from "@/components/serviceDetails/ServiceSidebar";
+import Heading from "@/components/Shared/Heading";
 
 export const metadata = {
-  title: "Service Details | CarDoc",
+  title: "Service Details",
   description: "Car repair and maintenance services",
 };
 
@@ -17,7 +17,7 @@ const Page = async ({ params }) => {
     <section className="pb-24">
       {/* Banner */}
       <div className="max-w-7xl mx-auto px-4 mt-10">
-        <ServiceBanner title={service.title} />
+        <Heading title="All about the service" currentRoute="Service Details" />
       </div>
 
       {/* Main Content */}

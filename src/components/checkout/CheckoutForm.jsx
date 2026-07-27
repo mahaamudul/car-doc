@@ -13,7 +13,7 @@ const CheckoutForm = ({ service }) => {
 
   const handleBooking = async (e) => {
     e.preventDefault();
-
+    
     setLoading(true);
 
     const form = e.target;
