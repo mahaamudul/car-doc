@@ -1,23 +1,28 @@
 import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 export async function middleware(req) {
-  // 1. Check for BOTH local (HTTP) and secure (HTTPS) cookies
-  const token = 
-    req.cookies.get("next-auth.session-token")?.value || 
-    req.cookies.get("__secure-next-auth.session-token")?.value;
-    
   const pathname = req.nextUrl.pathname;
-    console.log(token);
-    console.log(pathname);
 
-  // 2. Safely bypass internal API routes
-  if (pathname.includes('api')) {
+  // 1. Safely bypass internal API routes
+  if (pathname.includes("api")) {
     return NextResponse.next();
   }
 
+  // 2. Use NextAuth's built-in helper to check for a valid session token
+  // NEXTAUTH_SECRET must be set in your production environment variables (e.g., Vercel)
+  const token = await getToken({
+    req,
+    secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
+  });
+
   // 3. Redirect unauthenticated users
   if (!token) {
-    return NextResponse.redirect(new URL(`/login?redirect=${encodeURIComponent(pathname)}`, req.url));
+    const loginUrl = new URL(
+      `/login?redirect=${encodeURIComponent(pathname)}`,
+      req.url
+    );
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();

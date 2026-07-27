@@ -17,25 +17,27 @@ const LoginContent = () => {
   const path = searchParams.get('redirect');
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const email = form.email.value;
-    const password = form.password.value;
+  e.preventDefault();
+  const form = e.target;
+  const email = form.email.value;
+  const password = form.password.value;
+
+  const response = await signIn("credentials", {
+    email,
+    password,
+    redirect: false,
+  });
+
+  if (response?.ok) {
+    toast.success("Login successful!");
     
-    const response = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-    
-    if (response?.ok) {
-      router.push(path ? path : "/");
-      router.refresh();
-      toast.success("Login successful!");
-    } else {
-      toast.error("Invalid email or password");
-    }
+    // Force a full location change to ensure cookies & server session sync in production
+    const targetPath = path ? decodeURIComponent(path) : "/";
+    window.location.href = targetPath;
+  } else {
+    toast.error("Invalid email or password");
   }
+};
 
   return (
     <section className="min-h-screen flex items-center py-16">
