@@ -10,6 +10,7 @@ const DashboardNav = ({ children }) => {
   const navItems = [
     { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
     { name: "Add Service", href: "/dashboard/add-service", icon: LayoutDashboard },
+    { name: "Manage Services", href: "/dashboard/manage-services", icon: Wrench },
     { name: "Manage Bookings", href: "/dashboard/manage-bookings", icon: Calendar },
     { name: "Users", href: "/dashboard/users", icon: Users },
   ];

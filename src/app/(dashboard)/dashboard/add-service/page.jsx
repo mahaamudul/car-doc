@@ -1,11 +1,13 @@
-import React from 'react';
+import AddServiceForm from "@/components/dashboard/AddServiceForm";
 
-const page = () => {
-    return (
-        <div>
-            
-        </div>
-    );
+export const metadata = {
+  title: "Add New Service | CarDoc Admin",
 };
 
-export default page;
+export default function AddServicePage() {
+  return (
+    <div className="py-4">
+      <AddServiceForm />
+    </div>
+  );
+}
