@@ -1,4 +1,4 @@
-import DashboardNav from "@/components/Dashboard/DashboardNav";
+import DashboardNav from "@/components/dashboard/DashboardNav";
 
 export const metadata = {
   title: "Admin Dashboard | CarDoc",
