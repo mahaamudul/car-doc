@@ -1,7 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Navbar from "@/components/Shared/Navbar";
-import Footer from "@/components/Shared/Footer";
+import "@/app/globals.css";
 import AuthProvider from "@/services/AuthProvider";
 import { Toaster } from "sonner";
 
@@ -33,7 +31,7 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col">
         <Toaster
           position="top-center"
-           closeButton
+          closeButton
           className="flex justify-center"
           toastOptions={{
             style: {
@@ -44,9 +42,7 @@ export default function RootLayout({ children }) {
         />
 
         <AuthProvider>
-          <Navbar></Navbar>
           {children}
-          <Footer></Footer>
         </AuthProvider>
       </body>
     </html>
