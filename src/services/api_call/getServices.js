@@ -1,22 +1,44 @@
+import { connectDB } from "@/app/lib/connectDB";
+import { ObjectId } from "mongodb";
+
+/**
+ * Fetch all services directly from MongoDB
+ */
 export const getServices = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/services/api/get-all`, {
-      cache: "no-store", // Ensures fresh data
-    });
-    
-    if (!res.ok) return [];
-    
-    const data = await res.json();
-    // Handles whether your API returns { services: [...] } or direct array [...]
-    return data.services || data || [];
+    const db = await connectDB();
+    const services = await db.collection("services").find({}).toArray();
+
+    // Convert MongoDB _id (ObjectID) to String for Next.js component compatibility
+    return services.map((service) => ({
+      ...service,
+      _id: service._id.toString(),
+    }));
   } catch (err) {
     console.error("Failed to fetch services:", err);
     return [];
   }
 };
 
+/**
+ * Fetch a single service by ID directly from MongoDB
+ */
 export const getServiceDetails = async (id) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/services/api/${id}`)
-  const data = await res.json();
-  return data;
-} 
+  try {
+    if (!id) return null;
+
+    const db = await connectDB();
+    const query = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { service_id: id };
+    const service = await db.collection("services").findOne(query);
+
+    if (!service) return null;
+
+    return {
+      ...service,
+      _id: service._id.toString(),
+    };
+  } catch (err) {
+    console.error(`Failed to fetch service details for ID ${id}:`, err);
+    return null;
+  }
+};
